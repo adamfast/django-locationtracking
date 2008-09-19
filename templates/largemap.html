@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block head %}
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=**your google maps api key**" type="text/javascript"></script>
+<script type="text/javascript">
+
+  //<![CDATA[
+
+function createMarker(point,html) {
+  var marker = new GMarker(point);
+  GEvent.addListener(marker, "click", function() {
+    marker.openInfoWindowHtml(html);
+  });
+  return marker;
+}
+
+function load() {
+  if (GBrowserIsCompatible()) {
+    var map = new GMap2(document.getElementById("map"));
+    map.removeMapType(G_NORMAL_MAP);
+    map.removeMapType(G_SATELLITE_MAP);
+    var mapControl = new GMapTypeControl();
+    map.addControl(mapControl);
+    map.addControl(new GSmallMapControl());
+    map.setCenter(new GLatLng(0,0), 0);
+
+    var bounds = new GLatLngBounds();
+
+{% if positions %}{% for report in positions %}
+    var point{{ forloop.counter }} = new GLatLng({{ report.latitude }}, {{ report.longitude }});
+    map.addOverlay(createMarker(point{{ forloop.counter }}, "{% autoescape off %}{{ report.get_bubble_text }}{% endautoescape %}"));
+    bounds.extend(point{{ forloop.counter }})
+{% endfor %}{% endif %}
+
+{% if positions %}{% for report in positions %}
+    {% if forloop.first %}{% else %}
+    var line{{ forloop.counter|add:"-1" }} = new GPolyline([
+      point{{ forloop.counter|add:"-1" }},
+      point{{ forloop.counter }}
+    ], "#ff0000", 4);
+    map.addOverlay(line{{ forloop.counter|add:"-1" }})
+    {% endif %}
+{% endfor %}{% endif %}
+
+    map.setZoom(map.getBoundsZoomLevel(bounds))
+    map.setCenter(bounds.getCenter())
+  }
+}
+
+  //]]>
+</script>
+{% endblock %}
+
+{% block body %} onload="load()" onunload="GUnload()"{% endblock %}
+
+{% block content %}
+<p><strong>Info:</strong><br/>
+{{ map_info }}<br/></p>
+<div id="map" style="width: 690px; height: 480px"></div>
+{% endblock %}
