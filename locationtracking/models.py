@@ -4,6 +4,8 @@ from django.db import models
 class PositionReportSource(models.Model):
     name = models.CharField(max_length=64)
     display_on_maps = models.BooleanField(default=False)
+    auto_import = models.BooleanField(default=True)
+    display_description = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
         return u'%s' % self.name
