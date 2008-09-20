@@ -5,6 +5,7 @@ class PositionReportSource(models.Model):
     name = models.CharField(max_length=64)
     display_on_maps = models.BooleanField(default=False)
     auto_import = models.BooleanField(default=True)
+    auto_import_interval = models.IntegerField(null=True, blank=True)
     display_description = models.TextField(null=True, blank=True)
 
     def __unicode__(self):
