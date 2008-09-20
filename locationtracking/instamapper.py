@@ -2,6 +2,8 @@ import csv
 import datetime
 from dateutil import tz
 
+one_meter_per_second_in_miles_per_hour = 2.23693629
+
 class InstaMapperPosition():
     """A class to take a single InstaMapper string and return in a more usable format."""
 
@@ -10,7 +12,7 @@ class InstaMapperPosition():
         self.timestamp = self.timestamp.replace(tzinfo=tz.gettz('UTC'))
 
     def make_miles_per_hour(self):
-        self.speed_miles_per_hour = self.speed_meters_per_second * 2.23693629
+        self.speed_miles_per_hour = self.speed_meters_per_second * one_meter_per_second_in_miles_per_hour
 
     def __init__(self, value):
         reader = csv.reader([value,], quoting=csv.QUOTE_MINIMAL)
