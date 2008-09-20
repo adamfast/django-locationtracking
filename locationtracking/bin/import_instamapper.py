@@ -42,12 +42,16 @@ def import_positions(user, api_key):
                 report.save()
 
 
-if getattr(settings, 'INSTAMAPPER_USER', False):
-    user = User.objects.filter(username__exact=settings.INSTAMAPPER_USER)[0]
+def main():
+    if getattr(settings, 'INSTAMAPPER_USER', False):
+        user = User.objects.filter(username__exact=settings.INSTAMAPPER_USER)[0]
 
-    if getattr(settings, 'INSTAMAPPER_API_KEY', False):
-        import_positions(user, settings.INSTAMAPPER_API_KEY)
+        if getattr(settings, 'INSTAMAPPER_API_KEY', False):
+            import_positions(user, settings.INSTAMAPPER_API_KEY)
+        else:
+            print('You forgot to set INSTAMAPPER_API_KEY in your settings file.')
     else:
-        print('You forgot to set INSTAMAPPER_API_KEY in your settings file.')
-else:
-    print('You forgot to set INSTAMAPPER_USER in your settings file.')
+        print('You forgot to set INSTAMAPPER_USER in your settings file.')
+
+if __name__ == '__main__':
+    main()
