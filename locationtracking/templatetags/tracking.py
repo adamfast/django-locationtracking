@@ -14,7 +14,10 @@ class LatestPositionReportNode(template.Node):
         self.var_name = var_name
 
     def render(self, context):
-        report = PositionReport.objects.filter(user__exact=self.user).order_by('-timestamp_received')[0]
+        try:
+            report = PositionReport.objects.filter(user__exact=self.user).order_by('-timestamp_received')[0]
+        except:
+            report = None
         context[self.var_name] = report
         return ''
 

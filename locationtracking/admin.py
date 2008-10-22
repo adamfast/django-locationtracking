@@ -1,5 +1,5 @@
 from django.contrib import admin
-from locationtracking.models import PositionReport, PositionReportSource
+from models import PositionReport, PositionReportSource
 
 class PositionReportSourceAdmin(admin.ModelAdmin):
     list_display = ('name', 'display_on_maps',)
