@@ -1,5 +1,6 @@
 import re
 from django import template
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 
@@ -19,6 +20,7 @@ class LatestPositionReportNode(template.Node):
         except:
             report = None
         context[self.var_name] = report
+        context['google_maps_api_key'] = getattr(settings, 'GOOGLE_MAPS_KEY', 'not-set')
         return ''
 
 def get_latest_position(parser, token):

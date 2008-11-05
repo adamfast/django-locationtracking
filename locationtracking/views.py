@@ -26,4 +26,5 @@ def track(request, start_date=None, end_date=None):
     {
         'map_info': map_info_string,
         'positions': position_list,
+        'google_maps_api_key': getattr(settings, 'GOOGLE_MAPS_KEY', 'not-set'),
     }, context_instance=RequestContext(request))

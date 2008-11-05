@@ -11,7 +11,7 @@ Supported Devices:
 
 To install / use:
   - Put the "locationtracking" directory somewhere on your PYTHONPATH
-  - Define a settings.GOOGLE_MAPS_KEY attribute
+  - Define a settings.GOOGLE_MAPS_KEY attribute (this will be automatically added to the context of any page that calls the tracking templatetag or the large map view as `google_maps_api_key`)
   - Define settings.INSTAMAPPER_USER, settings.INSTAMAPPER_API_KEY and settings.INSTAMAPPER_SOURCE_NAME
   - Add 'locationtracking' to your INSTALLED_APPS, and run syncdb
   - Add "(r'^locationtracking/', include('locationtracking.urls'))," to your main URLconf to include the locationtracking URLs
