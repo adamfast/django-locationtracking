@@ -1,6 +1,7 @@
 import csv
 import datetime
 from dateutil import tz
+from django.conf import settings
 
 one_meter_per_second_in_miles_per_hour = 2.23693629
 
@@ -8,8 +9,12 @@ class InstaMapperPosition():
     """A class to take a single InstaMapper string and return in a more usable format."""
 
     def make_timestamp(self):
-        self.timestamp = datetime.datetime.utcfromtimestamp(self.timestamp_raw)
-        self.timestamp = self.timestamp.replace(tzinfo=tz.gettz('UTC'))
+        if settings.DATABASE_ENGINE == 'postgresql_psycopg2': # PostgreSQL can handle UTC dates, others cannot
+            self.timestamp = datetime.datetime.utcfromtimestamp(self.timestamp_raw)
+            self.timestamp = self.timestamp.replace(tzinfo=tz.gettz('UTC'))
+        else:
+            self.timestamp = time.localtime(self.timestamp_raw)
+            self.timestamp = time.strftime("%Y-%m-%d %H:%M", self.timestamp)
 
     def make_miles_per_hour(self):
         self.speed_miles_per_hour = self.speed_meters_per_second * one_meter_per_second_in_miles_per_hour
