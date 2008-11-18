@@ -19,6 +19,9 @@ class InstaMapperPosition():
     def make_miles_per_hour(self):
         self.speed_miles_per_hour = self.speed_meters_per_second * one_meter_per_second_in_miles_per_hour
 
+    def make_altitude_in_feet(self):
+        self.altitude = self.altitude_meters * 3.2808399 # meter / feet conversion factor. Could be more accurate, but I'd say this is close enough.
+
     def __init__(self, value):
         reader = csv.reader([value,], quoting=csv.QUOTE_MINIMAL)
         for row in reader:
@@ -30,7 +33,8 @@ class InstaMapperPosition():
                     self.make_timestamp()
                     self.latitude = row[3]
                     self.longitude = row[4]
-                    self.altitude_meters = row[5]
+                    self.altitude_meters = float(row[5])
+                    self.make_altitude_in_feet()
                     self.speed_meters_per_second = float(row[6])
                     self.make_miles_per_hour()
                     self.heading = row[7]

@@ -36,6 +36,7 @@ def import_positions(user, api_key):
                 report.longitude = position.longitude
                 report.heading = position.heading
                 report.speed = position.speed_miles_per_hour
+                report.altitude = position.altitude
                 report.source = source
                 report.active = True
                 report.should_tumble = False
