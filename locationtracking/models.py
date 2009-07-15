@@ -26,7 +26,7 @@ class PositionReport(models.Model):
     geoidal_seperation_meters = models.IntegerField(null=True, blank=True)
     time_since_dgps_update = models.CharField(max_length=10, null=True, blank=True)
     dgps_reference_station_id = models.CharField(max_length=10, null=True, blank=True)
-    receiver_warning = models.BooleanField(null=True, blank=True)
+    receiver_warning = models.NullBooleanField(null=True, blank=True)
     magnetic_variation = models.DecimalField(max_digits=10, decimal_places=3, null=True, blank=True)
     magnetic_variation_direction = models.CharField(max_length=1, null=True, blank=True)
     checksum_gpgga = models.CharField('$GPGGA Checksum', max_length=10, null=True, blank=True)
