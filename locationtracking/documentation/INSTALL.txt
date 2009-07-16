@@ -14,6 +14,8 @@ To install / use:
   - Define a settings.GOOGLE_MAPS_KEY attribute (this will be automatically added to the context of any page that calls the tracking templatetag or the large map view as `google_maps_api_key`)
   - Define settings.INSTAMAPPER_USER, settings.INSTAMAPPER_API_KEY and settings.INSTAMAPPER_SOURCE_NAME
   - Add 'locationtracking' to your INSTALLED_APPS, and run syncdb
+  - OR, if you are using South for database migrations:
+    - run `manage.py migrate locationtracking` to have the database tables created
   - Add "(r'^locationtracking/', include('locationtracking.urls'))," to your main URLconf to include the locationtracking URLs
   - In the admin, define a position report source (to match settings.INSTAMAPPER_SOURCE_NAME) and set the "display on maps" attribute to True
 
