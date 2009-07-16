@@ -2,9 +2,11 @@ Dependencies:
   - dateutil
 
 Compatibility Notes:
-  - Tested / used with Django 1.0
+  - Tested / used with Django 1.0 and the soon-to-be 1.1
   - Tested / used with Python 2.5, if there are issues with others >= 2.3 report them.
-  - Many providers supply time in UTC - this means if your database does not support timezones your times will not shift to your time zone (PostgreSQL is the only DB I'm aware of supporting timezones.) I plan to "build in" a timedelta object in the future that can be used to correct for this.
+  - I use South (http://south.aeracode.org) for 
+  - Many providers supply time in UTC - this means if your database does not support timezones your times will not shift to your time zone (PostgreSQL is the only DB I'm aware of supporting timezones.) I plan to "build in" a timedelta object in the future that can be used to correct for this (please note it's nothing I need, and nothing I've heard of others needing. So it's really, really low on my list).
+
 
 Supported Devices:
   - Instamapper (http://www.instamapper.com/) "is a free service that allows you to track a person or vehicle online in real time using a GPS-enabled cell phone." (from their website) See their website for information on the devices they support and an explanation of how their service works. Once your device is registered you will need to enable API access and get an API ID from them that is entered into the settings value below.
