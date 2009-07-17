@@ -1,6 +1,7 @@
 import urllib2
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.gis.geos import Point
 from locationtracking.models import PositionReport, PositionReportSource
 from locationtracking.instamapper import InstaMapperPosition
 
@@ -34,6 +35,7 @@ def import_positions(user, api_key):
                 report.timestamp_received = position.timestamp
                 report.latitude = position.latitude
                 report.longitude = position.longitude
+                report.point = Point((float(position.longitude), float(position.latitude)),)
                 report.heading = position.heading
                 report.speed = position.speed_miles_per_hour
                 report.altitude = position.altitude

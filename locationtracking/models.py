@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from django.db import models
+from django.contrib.gis.db import models
 
 class PositionReportSource(models.Model):
     name = models.CharField(max_length=64)
@@ -37,6 +37,9 @@ class PositionReport(models.Model):
     active = models.BooleanField(default=False)
     public = models.BooleanField(default=True)
     should_tumble = models.BooleanField(default=True)
+    point = models.PointField(srid=4326, null=True, blank=True)
+
+    objects = models.GeoManager()
 
     def get_bubble_text(self):
         bubble_text = 'Source: %s<br/>Received %s (Central)' % (self.source.name, self.timestamp_received)
