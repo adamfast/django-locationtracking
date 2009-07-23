@@ -53,3 +53,18 @@ class PositionReport(models.Model):
 
     def __unicode__(self):
         return u'Received %s, Lat/%s Lon/%s' % (self.timestamp_received, self.latitude, self.longitude)
+
+class Location(models.Model):
+    """A model for defining 'saved' positions of interest. The nearest_location templatetag will then attempt to find where you are (only looking within settings.)"""
+    name = models.CharField(max_length=128)
+    slug = models.SlugField()
+    point = models.PointField(srid=4326)
+    public = models.BooleanField()
+# Future functionality
+#    radius = models.IntegerField("The maximum distance (radius) a report can be from this location (in mi) before being considered 'there'")
+#    poly = models.PolygonField() # for eventual growth - plan is that the point (with a circle drawn of radius self.radius) will be stored here, and the query will simplify to a position report's point IN location poly
+
+    def __unicode__(self):
+        return self.name
+
+    objects = models.GeoManager()

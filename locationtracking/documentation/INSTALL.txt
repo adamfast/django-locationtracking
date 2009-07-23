@@ -17,6 +17,7 @@ To install / use:
   - Put the "locationtracking" directory somewhere on your PYTHONPATH
   - Define a settings.GOOGLE_MAPS_KEY attribute (this will be automatically added to the context of any page that calls the tracking templatetag or the large map view as `google_maps_api_key`)
   - Define settings.INSTAMAPPER_USER, settings.INSTAMAPPER_API_KEY and settings.INSTAMAPPER_SOURCE_NAME
+  - Define settings.MAXIMUM_LOCATION_DISTANCE as the maximum distance a position report can be (in mi) from a location and still count as "being there"
   - Add 'locationtracking' to your INSTALLED_APPS, and run syncdb
   - OR, if you are using South for database migrations:
     - run `manage.py migrate locationtracking` to have the database tables created
@@ -25,7 +26,7 @@ To install / use:
 To upgrade from rev. 19 or earlier to the new GeoDjango-enabled version:
   - I recommend getting south - follow its' install procedure, then:
     - `manage.py migrate locationtracking 0001_initial --fake` will inform South that you already have the necessary tables
-    - `manage.py migrate locationtracking` will run the script to create the point field on the PositionReport model
+    - `manage.py migrate locationtracking` will run the script to create the point field on the PositionReport model and create the Location model
 
 Now you're ready to import some data:
   - set PYTHONPATH and DJANGO_SETTINGS_MODULE
@@ -39,6 +40,12 @@ Now set up the map:
   - python locate/manage.py runserver
   - Go to http://localhost:8000/locationtracking/
   - It should show a map
+
+To use named locations:
+  - You must be retrieving a PositionReport in the template
+  - Add {% load locations %}{% get_location position as location %}
+    Assuming your call to get your latest position is a context variable named 'position' and you want an answer in the context variable 'location'
+  - Display is as simple as {% if location %}{{ location.name }}<br>{% endif %}
 
 For privacy, the location views CAN be marked as login_required if you so choose.
 

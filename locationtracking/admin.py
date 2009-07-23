@@ -1,5 +1,5 @@
 from django.contrib import admin
-from models import PositionReport, PositionReportSource
+from models import PositionReport, PositionReportSource, Location
 
 class PositionReportSourceAdmin(admin.ModelAdmin):
     list_display = ('name', 'display_on_maps',)
@@ -23,6 +23,11 @@ class PositionReportAdmin(admin.ModelAdmin):
         ),
     )
 
+class LocationAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+    list_filter = ('public',)
+    prepopulated_fields = {'slug': ('name',)}
 
 admin.site.register(PositionReportSource, PositionReportSourceAdmin)
 admin.site.register(PositionReport, PositionReportAdmin)
+admin.site.register(Location, LocationAdmin)
