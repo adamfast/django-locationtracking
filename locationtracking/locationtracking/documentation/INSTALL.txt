@@ -1,0 +1,52 @@
+Dependencies:
+  - dateutil
+  - GeoDjango dependencies: see www.geodjango.org
+
+Compatibility Notes:
+  - Tested / used with Django 1.0 and the soon-to-be 1.1
+  - Tested / used with Python 2.5, if there are issues with others >= 2.3 report them.
+  - I use South (http://south.aeracode.org) for database migrations.
+  - Many providers supply time in UTC - this means if your database does not support timezones your times will not shift to your time zone (PostgreSQL is the only DB I'm aware of supporting timezones.) I plan to "build in" a timedelta object in the future that can be used to correct for this (please note it's nothing I need, and nothing I've heard of others needing. So it's really, really low on my list).
+  - As of rev. 20 this package will begin having features that are only possible via GeoDjango. If you do not have the spatial libraries and database to support this, please downgrade to revision 19.
+
+
+Supported Devices:
+  - Instamapper (http://www.instamapper.com/) "is a free service that allows you to track a person or vehicle online in real time using a GPS-enabled cell phone." (from their website) See their website for information on the devices they support and an explanation of how their service works. Once your device is registered you will need to enable API access and get an API ID from them that is entered into the settings value below.
+
+To install / use:
+  - Put the "locationtracking" directory somewhere on your PYTHONPATH
+  - Define a settings.GOOGLE_MAPS_KEY attribute (this will be automatically added to the context of any page that calls the tracking templatetag or the large map view as `google_maps_api_key`)
+  - Define settings.INSTAMAPPER_USER, settings.INSTAMAPPER_API_KEY and settings.INSTAMAPPER_SOURCE_NAME
+  - Define settings.MAXIMUM_LOCATION_DISTANCE as the maximum distance a position report can be (in mi) from a location and still count as "being there"
+  - Add 'locationtracking' to your INSTALLED_APPS, and run syncdb
+  - OR, if you are using South for database migrations:
+    - run `manage.py migrate locationtracking` to have the database tables created
+  - Add "(r'^locationtracking/', include('locationtracking.urls'))," to your main URLconf to include the locationtracking URLs
+  - In the admin, define a position report source (to match settings.INSTAMAPPER_SOURCE_NAME) and set the "display on maps" attribute to True
+To upgrade from rev. 19 or earlier to the new GeoDjango-enabled version:
+  - I recommend getting south - follow its' install procedure, then:
+    - `manage.py migrate locationtracking 0001_initial --fake` will inform South that you already have the necessary tables
+    - `manage.py migrate locationtracking` will run the script to create the point field on the PositionReport model and create the Location model
+
+Now you're ready to import some data:
+  - set PYTHONPATH and DJANGO_SETTINGS_MODULE
+  - python locationtracking/bin/import_instamapper.py
+
+Now set up the map:
+  - The stock "largemap.html" template (map of positions from a single day) assumes you are using a base.html file with head, body, and content blocks.
+    HEAD: needs to be between <head> and </head> - this will be initialization JavaScript.
+    BODY: needs to be between <body and > - this will override your body tag with load/unload scripts.
+    CONTENT: your sites' content area.
+  - python locate/manage.py runserver
+  - Go to http://localhost:8000/locationtracking/
+  - It should show a map
+
+To use named locations:
+  - You must be retrieving a PositionReport in the template
+  - Add {% load locations %}{% get_location position as location %}
+    Assuming your call to get your latest position is a context variable named 'position' and you want an answer in the context variable 'location'
+  - Display is as simple as {% if location %}{{ location.name }}<br>{% endif %}
+
+For privacy, the location views CAN be marked as login_required if you so choose.
+
+More details can be found in a screencast on my website, http://www.adamfast.com/programming/locationtracking/
