@@ -1,17 +1,19 @@
 Dependencies:
   - dateutil
   - GeoDjango dependencies: see www.geodjango.org
+  - aprsworld-api <http://github.com/adamfast/aprsworld-api> if you plan to use APRS
 
 Compatibility Notes:
-  - Tested / used with Django 1.0 and the soon-to-be 1.1
+  - Tested / used with Django 1.2
   - Tested / used with Python 2.5, if there are issues with others >= 2.3 report them.
   - I use South (http://south.aeracode.org) for database migrations.
-  - Many providers supply time in UTC - this means if your database does not support timezones your times will not shift to your time zone (PostgreSQL is the only DB I'm aware of supporting timezones.) I plan to "build in" a timedelta object in the future that can be used to correct for this (please note it's nothing I need, and nothing I've heard of others needing. So it's really, really low on my list).
+  - Many providers supply time in UTC - this means if your database does not support timezones your times will not shift to your time zone (PostgreSQL is the only DB I'm aware of supporting timezones.)
   - As of rev. 20 this package will begin having features that are only possible via GeoDjango. If you do not have the spatial libraries and database to support this, please downgrade to revision 19.
 
 
 Supported Devices:
   - Instamapper (http://www.instamapper.com/) "is a free service that allows you to track a person or vehicle online in real time using a GPS-enabled cell phone." (from their website) See their website for information on the devices they support and an explanation of how their service works. Once your device is registered you will need to enable API access and get an API ID from them that is entered into the settings value below.
+  - APRS (trademarked by Bob Bruniga, WB4APR) or the Automatic Packet Reporting System uses AX.25 packet radio on the frequency 144.39MHz in the US to allow licensed amateur radio operators to beacon their positions.
 
 To install / use:
   - Put the "locationtracking" directory somewhere on your PYTHONPATH
@@ -23,10 +25,13 @@ To install / use:
     - run `manage.py migrate locationtracking` to have the database tables created
   - Add "(r'^locationtracking/', include('locationtracking.urls'))," to your main URLconf to include the locationtracking URLs
   - In the admin, define a position report source (to match settings.INSTAMAPPER_SOURCE_NAME) and set the "display on maps" attribute to True
+  - If using APRS, set up a new database using Django's multi-DB called "aprs". That DB will be explicitly used by the calls inside bin/import_aprs.py.
+  - If using APRS, put your callsign and the user to attach positions to into bin/import_aprs.py. (If you actually use this and need a better solution please let me know. I'm lazily doing the easiest thing because I just don't see a target audience of people using this.)
 To upgrade from rev. 19 or earlier to the new GeoDjango-enabled version:
   - I recommend getting south - follow its' install procedure, then:
     - `manage.py migrate locationtracking 0001_initial --fake` will inform South that you already have the necessary tables
     - `manage.py migrate locationtracking` will run the script to create the point field on the PositionReport model and create the Location model
+
 
 Now you're ready to import some data:
   - set PYTHONPATH and DJANGO_SETTINGS_MODULE
