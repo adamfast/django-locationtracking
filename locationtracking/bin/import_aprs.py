@@ -27,6 +27,6 @@ if __name__ == '__main__':
     callsign = 'N0CALL'
     user = User.objects.get(username='user')
 
-    last_position = PositionReport.objects.filter(user=user).order_by('-timestamp_received')[:1]
+    last_position = PositionReport.objects.filter(user=user, source=PositionReportSource.objects.get_or_create(name='APRSWorld')[0]).order_by('-timestamp_received')[:1]
 
     retrieve_positions(callsign, user, last_position.timestamp_received) # ask for anything after the last one we have
