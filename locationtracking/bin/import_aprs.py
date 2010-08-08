@@ -16,8 +16,9 @@ def retrieve_positions(callsign, user, since):
         report.longitude = str(position.longitude)
         report.point = Point(position.longitude, position.latitude)
         report.heading = position.course
-        report.speed = position.speed
-        report.altitude = position.altitude
+        # APRSworld stores speed in kph and altitude in m, but all the other APRS sites store in imperial units
+        report.speed = position.speed * 0.621371192
+        report.altitude = position.altitude * 3.2808399
         report.save()
 
 if __name__ == '__main__':
