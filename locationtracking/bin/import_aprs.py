@@ -1,3 +1,4 @@
+import datetime
 from dateutil import tz
 from django.contrib.gis.geos import Point
 from aprsworld_api.position.models import Position
@@ -28,6 +29,10 @@ if __name__ == '__main__':
     callsign = 'N0CALL'
     user = User.objects.get(username='user')
 
-    last_position = PositionReport.objects.filter(user=user, source=PositionReportSource.objects.get_or_create(name='APRSWorld')[0]).order_by('-timestamp_received')[:1]
+    try:
+        last_position = PositionReport.objects.filter(user=user, source=PositionReportSource.objects.get_or_create(name='APRSWorld')[0]).order_by('-timestamp_received')[0]
+    except IndexError:
+        last_position = object
+        last_position.timestamp_received = datetime.datetime(2001, 1, 1) # way in the past if nothing is found
 
     retrieve_positions(callsign, user, last_position.timestamp_received) # ask for anything after the last one we have
