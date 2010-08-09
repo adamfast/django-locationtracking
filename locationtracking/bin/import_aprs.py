@@ -4,8 +4,8 @@ from django.contrib.gis.geos import Point
 from aprsworld_api.position.models import Position
 from locationtracking.models import PositionReport, PositionReportSource
 
-def retrieve_positions(callsign, user, since):
-    source = PositionReportSource.objects.get_or_create(name='APRSWorld')[0]
+def retrieve_positions(callsign, user, since, source_name='APRSWorld'):
+    source = PositionReportSource.objects.get_or_create(name=source_name)[0]
 
     positions = Position.objects.using('aprs').filter(source=callsign, packet_date__gte=since)
 
